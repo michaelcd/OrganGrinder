@@ -508,8 +508,33 @@
 
 	var Store = __webpack_require__(8).Store;
 	var AppDispatcher = __webpack_require__(1);
+	var Note = __webpack_require__(6);
+	var Tones = __webpack_require__(29);
 	
+	var _notes = [],
+	    _handlers = [];
 	var KeyStore = new Store(AppDispatcher);
+	
+	//register
+	KeyStore.__onDispatch = function (payload) {
+	  if (payload.actionType === "KEY_DOWN") {
+	    // AppDispatcher.waitFor([IngrediantStore.dispatcherCallbackId]);
+	    // RecipeStore.create(payload.recipe);
+	    if (_notes.indexOf(payload.noteName) === -1) {
+	      _notes.push(payload.noteName);
+	      KeyStore.__emitChange();
+	      console.log(_notes);
+	      // Note.
+	    }
+	  } else if (payload.actionType === "KEY_UP") {
+	      var idx = _notes.indexOf(payload.noteName);
+	      if (idx >= 0) {
+	        _notes.splice(idx, 1);
+	        KeyStore.__emitChange();
+	        console.log(_notes);
+	      }
+	    }
+	};
 	
 	module.exports = KeyStore;
 
@@ -6966,19 +6991,19 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	// var KeyStore = require('../stores/KeyStore');
-	var Mapping = __webpack_require__(26);
+	var KeyActions = __webpack_require__(27);
 	
 	var KeyListener = function () {
 	  //waiting for handler
 	  //adds keys to store
 	  $(document).keydown(function (event) {
-	    console.log(Mapping[event.keyCode]);
+	    KeyActions.keyPressed(event.keyCode);
 	  });
 	
 	  //waiting for handler
 	  //removes key from store
 	  $(document).keyup(function (event) {
-	    console.log(Mapping[event.keyCode]);
+	    KeyActions.keyReleased(event.keyCode);
 	  });
 	};
 	
@@ -7006,6 +7031,54 @@
 	};
 	
 	module.exports = Mapping;
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Mapping = __webpack_require__(26);
+	var AppDispatcher = __webpack_require__(1);
+	
+	var KeyActions = {
+	  keyPressed: function (key) {
+	    var payload = { noteName: Mapping[key], actionType: "KEY_DOWN" };
+	    AppDispatcher.dispatch(payload);
+	  },
+	
+	  keyReleased: function (key) {
+	    var payload = { noteName: Mapping[key], actionType: "KEY_UP" };
+	    AppDispatcher.dispatch(payload);
+	  }
+	
+	};
+	
+	module.exports = KeyActions;
+
+/***/ },
+/* 28 */,
+/* 29 */
+/***/ function(module, exports) {
+
+	var TONES = {
+	  "A4": 440,
+	  "A#4/Bb4": 466.16,
+	  "B4": 493.88,
+	  "C5": 523.25,
+	  "C#5/Db5": 554.37,
+	  "D5": 587.33,
+	  "D#5/Eb5": 622.25,
+	  "E5": 659.25,
+	  "F5": 698.46,
+	  "F#5/Gb5": 739.99,
+	  "G5": 783.99,
+	  "G#5/Ab5": 830.61,
+	  "A5": 880,
+	  "A#5/Bb5": 932.33,
+	  "B5": 987.77,
+	  "C6": 1046.5
+	};
+	
+	module.exports = TONES;
 
 /***/ }
 /******/ ]);
