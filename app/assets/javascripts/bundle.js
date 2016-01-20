@@ -26654,6 +26654,7 @@
 	var React = __webpack_require__(30);
 	var Key = __webpack_require__(187);
 	var Tones = __webpack_require__(29);
+	var Recorder = __webpack_require__(189);
 	
 	var Organ = React.createClass({
 	  displayName: 'Organ',
@@ -26666,12 +26667,103 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'organ group' },
-	      keys
+	      keys,
+	      React.createElement(Recorder, null)
 	    );
 	  }
 	});
 	
 	module.exports = Organ;
+
+/***/ },
+/* 189 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(30);
+	var Track = __webpack_require__(190);
+	var KeyStore = __webpack_require__(7);
+	
+	var Recorder = React.createClass({
+	  displayName: 'Recorder',
+	
+	  getInitialState: function () {
+	    return { isRecording: false, track: new Track({ name: "" }) };
+	  },
+	
+	  componentDidMount: function () {
+	    KeyStore.addListener(this.state.track.addNotes.bind(this.state.track));
+	  },
+	
+	  recordStart: function () {
+	    this.state.track.startRecording();
+	    this.setState({ isRecording: true });
+	  },
+	
+	  recordStop: function () {
+	    this.state.track.stopRecording();
+	    this.setState({ isRecording: false });
+	  },
+	
+	  render: function () {
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'button',
+	        { onClick: this.recordStart },
+	        'Start'
+	      ),
+	      React.createElement(
+	        'button',
+	        { onClick: this.recordStop },
+	        'Stop'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = Recorder;
+
+/***/ },
+/* 190 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var KeyStore = __webpack_require__(7);
+	
+	var Track = function (attributes) {
+	  this.attributes = attributes;
+	  this.attributes.roll = [];
+	  this.time = null;
+	};
+	
+	Track.prototype.startRecording = function () {
+	  this.attributes.roll = [];
+	  this.time = new Date();
+	};
+	
+	Track.prototype.addNotes = function (notes) {
+	  //will change
+	  if (typeof notes === "undefined") {
+	    notes = KeyStore.all();
+	  }
+	
+	  var timeSlice = new Date() - this.time;
+	  var rollObj = { timeSlice: timeSlice, notes: notes };
+	  if (this.time !== null) {
+	    this.attributes.roll.push(rollObj);
+	    console.log(this.attributes.roll);
+	  }
+	};
+	
+	Track.prototype.stopRecording = function () {
+	  this.addNotes([]);
+	  this.time = null;
+	};
+	
+	Track.prototype.play = function () {};
+	
+	module.exports = Track;
 
 /***/ }
 /******/ ]);
