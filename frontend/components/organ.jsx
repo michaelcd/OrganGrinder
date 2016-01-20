@@ -5,11 +5,11 @@ var Tones = require('../constants/Tones');
 var Organ = React.createClass({
   render: function() {
     var keys = Object.keys(Tones).map(function (note) {
-      return <Key noteName={note} />;
+      return <Key key={note} noteName={note} />;
     });
 
     return (
-      <div>
+      <div className="organ group">
         {keys}
       </div>
     );

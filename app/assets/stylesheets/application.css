@@ -13,3 +13,27 @@
  *= require_tree .
  *= require_self
  */
+
+.organ {
+  margin: auto;
+  width: 936px;
+}
+
+.key {
+  padding: 5px;
+  height: 25px;
+  width: 60px;
+  border: 1px solid black;
+  float: left;
+  text-align: center;
+}
+
+.played {
+  background: red;
+}
+
+.group:after {
+  content: "";
+  display: block;
+  clear: both;
+}

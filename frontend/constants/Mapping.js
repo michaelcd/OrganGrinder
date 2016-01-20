@@ -10,7 +10,8 @@ var Mapping = {
   69 : "D#5/Eb5",
   84 : "F#5/Gb5",
   89 : "G#5/Ab5",
-  85 : "A#5/Bb5"
+  85 : "A#5/Bb5",
+  75 : "C6"
 };
 
 module.exports = Mapping;

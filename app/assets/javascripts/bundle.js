@@ -7041,7 +7041,8 @@
 	  69: "D#5/Eb5",
 	  84: "F#5/Gb5",
 	  89: "G#5/Ab5",
-	  85: "A#5/Bb5"
+	  85: "A#5/Bb5",
+	  75: "C6"
 	};
 	
 	module.exports = Mapping;
@@ -26627,13 +26628,18 @@
 	
 	  render: function () {
 	    var name = "";
+	    var styles = "key";
 	    if (this.props.noteName) {
 	      name = this.props.noteName;
 	    }
 	
+	    if (this.state.note === true) {
+	      styles = "key played";
+	    }
+	
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: styles },
 	      name
 	    );
 	  }
@@ -26654,12 +26660,12 @@
 	
 	  render: function () {
 	    var keys = Object.keys(Tones).map(function (note) {
-	      return React.createElement(Key, { noteName: note });
+	      return React.createElement(Key, { key: note, noteName: note });
 	    });
 	
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'organ group' },
 	      keys
 	    );
 	  }

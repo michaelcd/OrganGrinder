@@ -27,12 +27,17 @@ var Key = React.createClass({
 
   render: function () {
     var name = "";
+    var styles = "key";
     if (this.props.noteName) {
       name = this.props.noteName;
     }
 
+    if (this.state.note === true) {
+      styles = "key played";
+    }
+
     return (
-      <div>
+      <div className={styles}>
         {name}
       </div>
     );
